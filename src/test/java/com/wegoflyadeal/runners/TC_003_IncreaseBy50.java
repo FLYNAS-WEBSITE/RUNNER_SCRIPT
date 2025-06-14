@@ -94,7 +94,6 @@ public class TC_003_IncreaseBy50 {
 		options.addPreference("layout.css.devPixelsPerPx", "0.3");
 		options.addPreference("permissions.default.image", 2);
 		options.addArguments("--headless");
-		System.setProperty(FirefoxDriver.SystemProperty.BROWSER_LOGFILE, "/dev/null"); 
 		driver = new FirefoxDriver(options);
 		driver.manage().window().maximize();
 		driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
