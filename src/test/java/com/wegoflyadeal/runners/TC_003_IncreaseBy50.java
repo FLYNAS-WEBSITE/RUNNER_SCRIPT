@@ -9,13 +9,10 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -27,11 +24,8 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.PageLoadStrategy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -44,8 +38,6 @@ import org.testng.annotations.Test;
 import com.wegoflyadeal.api.WegoApliClient;
 import com.wegoflyadeal.constants.Constants;
 import com.wegoflyadeal.helpers.WegoFlights;
-
-import io.github.bonigarcia.wdm.WebDriverManager;
 
 public class TC_003_IncreaseBy50 {
 
@@ -102,6 +94,7 @@ public class TC_003_IncreaseBy50 {
 		options.addPreference("layout.css.devPixelsPerPx", "0.3");
 		options.addPreference("permissions.default.image", 2);
 		options.addArguments("--headless");
+		System.setProperty(FirefoxDriver.SystemProperty.BROWSER_LOGFILE, "/dev/null"); 
 		driver = new FirefoxDriver(options);
 		driver.manage().window().maximize();
 		driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
@@ -241,7 +234,7 @@ public class TC_003_IncreaseBy50 {
 	    } catch (InterruptedException e) {
 	    }
 	    resultsForWego();
-	    //Next_Dates();
+	    Next_Dates();
 	    // Add the current URL to the set of visited URLs
 	    visitedURLs.add(Wego_URL);
 	}
