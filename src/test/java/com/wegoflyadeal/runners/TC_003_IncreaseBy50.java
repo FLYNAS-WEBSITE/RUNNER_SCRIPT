@@ -32,6 +32,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterMethod;
@@ -96,38 +98,14 @@ public class TC_003_IncreaseBy50 {
 	@BeforeTest
 	public void setUp() throws InterruptedException {
 
-		WebDriverManager.chromedriver().setup();
-		ChromeOptions options = new ChromeOptions();
-		options.setPageLoadStrategy(PageLoadStrategy.NONE);
-		options.addArguments("start-maximized");
-		options.setExperimentalOption("useAutomationExtension", false);
-		options.setExperimentalOption("excludeSwitches", Collections.singletonList("enable-automation"));
-		options.addArguments("--no-sandbox");
-		options.addArguments("--disable-infobars");
-		options.addArguments("--disable-dev-shm-usage");
-		options.addArguments("--disable-browser-side-navigation");
-		options.addArguments("--disable-gpu");
-		options.addArguments("--disable-web-security");
-		options.addArguments("--no-proxy-server");
-		Map<String, Object> prefs = new HashMap<String, Object>();
-		prefs.put("credentials_enable_service", false);
-		prefs.put("profile.default_content_setting_values.notifications", 2);
-		// 1-Allow, 2-Block, 0-default
-		options.setExperimentalOption("prefs", prefs);
-		prefs.put("profile.password_manager_enabled", false);
-		options.setExperimentalOption("prefs", prefs);
-		//prefs.put("profile.managed_default_content_settings.images", 2);
-		options.setExperimentalOption("prefs", prefs);
-		options.addArguments("--incognito", "--disable-blink-features=AutomationControlled");
-		options.addArguments("force-device-scale-factor=0.30");
-		options.addArguments("--clear-ssl-state");
-		options.addArguments("--disable-cache");
-		options.addArguments("--disk-cache-size=0");
-		options.addArguments("--disable-network-throttling");
-		driver = new ChromeDriver(options);
+		FirefoxOptions options = new FirefoxOptions();
+		options.addPreference("layout.css.devPixelsPerPx", "0.3");
+		options.addPreference("permissions.default.image", 2);
+		options.addArguments("--headless");
+		driver = new FirefoxDriver(options);
 		driver.manage().window().maximize();
-		driver.manage().timeouts().implicitlyWait(4, TimeUnit.SECONDS);
-		//wego_Login();
+		driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
+		driver.manage().deleteAllCookies();
 	}
 	
    
@@ -596,24 +574,7 @@ public class TC_003_IncreaseBy50 {
 	
 	}
 
-	public void wego_Login() throws InterruptedException {
-	try {
-	driver.get("https://sa.wego.com/en?modal=login");
-	Thread.sleep(5000);
-	WebElement loginemail = driver.findElement(By.xpath("//input[@id='email']"));
-	loginemail.sendKeys("flyadealreservations@gmail.com");
-	WebElement loginpassword = driver.findElement(By.xpath("//input[@id='password']"));
-	loginpassword.sendKeys("Flyadeal@123");
-	Thread.sleep(1000);
-	WebElement loginbtn = driver.findElement(By.xpath("(//button[@type='submit'])[2]"));
-	Thread.sleep(3000);
-	loginbtn.click();
-	Thread.sleep(5000);
-	System.out.println("Wego SignIn");
-	}
-	catch (Exception e) {
-	}
-  }
+
 	
 	@AfterMethod
 	public void teardown() {
