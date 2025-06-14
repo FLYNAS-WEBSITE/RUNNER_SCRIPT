@@ -284,8 +284,6 @@ public class TC_003_IncreaseBy50 {
                 break; // Exit the loop if the element is displayed
             } catch (Exception e) {
                 System.out.println("Wego SRP Page not Displayed - Retry #" + retryCount);
-                teardown();
-                setUp();
                 driver.get(Wego_URL);
                 Thread.sleep(5000);
             }
