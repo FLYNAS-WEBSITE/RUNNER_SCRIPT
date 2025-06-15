@@ -211,7 +211,7 @@ public class TC_003_IncreaseBy50 {
 		
 	    //Wego_URL = "https://"+websiteName+"/en/flights/searches/"+source+"-"+destination+"-"+ date+"/economy/1a:0c:0i?sort=price&order=asc&airlines=F3%2CXY";
 
-	    Wego_URL = "https://"+websiteName+"/en/flights/searches/"+source+"-"+destination+"-"+ date+"/economy/1a:0c:0i?sort=score&order=asc&payment_methods=97%2C191%2C189&utm_source=chatgpt.com";
+	    Wego_URL = "https://"+websiteName+"/en/flights/searches/"+source+"-"+destination+"-"+ date+"/economy/1a:0c:0i?sort=score&order=asc&payment_methods=97%2C191%2C189&airlines=J9%2CKU%2CSV%2CGF%2CRJ%2CEK%2CQR%2CTK%2CVF%2CWY%2CME%2CFZ%2CUL%2CEY%2CPC%2CET%2CG9%2CSM";
 
 	    // Check if the URL has been visited before
 	    if (visitedURLs.contains(Wego_URL)) {
