@@ -12,16 +12,16 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4  # Updated to v4
+        uses: actions/checkout@v4
 
       - name: Cache Maven dependencies
-        uses: actions/cache@v4  # Updated to v4
+        uses: actions/cache@v4
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
 
       - name: Set up JDK 17
-        uses: actions/setup-java@v3  # Updated to v3
+        uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: 17
@@ -46,15 +46,14 @@ jobs:
       - name: Set up Maven
         run: sudo apt-get install -y maven
 
-      - name: Retry loop
-        id: retry
+      - name: Run Tests with Retry (Quiet Maven)
         run: |
           for i in {1..3}; do
             echo "Attempt $i"
-            mvn test && break
+            mvn -q test && break  # Use quiet mode to reduce log noise
             if [ $i -lt 3 ]; then
               echo "Test failed. Retrying..."
-              sleep 10  # Wait for 10 seconds before retrying
+              sleep 10
             else
               echo "Test failed after $i attempts."
               exit 1
