@@ -228,7 +228,7 @@ public class TC_003_IncreaseBy50 {
 	    } catch (InterruptedException e) {
 	    }
 	    resultsForWego();
-	    Next_Dates();
+	    //Next_Dates();
 	    // Add the current URL to the set of visited URLs
 	    visitedURLs.add(Wego_URL);
 	}
@@ -281,8 +281,6 @@ public class TC_003_IncreaseBy50 {
 	                break;
 	            } catch (Exception e1) {
 	                System.out.println("Wego SRP Page not Displayed - Retry #" + retryCount);
-	                teardown();
-	                setUp();
 	                driver.get(Wego_URL);
 	                Thread.sleep(5000);
 	            }
