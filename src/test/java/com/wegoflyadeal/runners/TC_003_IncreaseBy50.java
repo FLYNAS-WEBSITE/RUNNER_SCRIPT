@@ -233,7 +233,7 @@ public class TC_003_IncreaseBy50 {
 	    } catch (InterruptedException e) {
 	    }
 	    resultsForWego();
-	    Next_Dates();
+	    //Next_Dates();
 	    // Add the current URL to the set of visited URLs
 	    visitedURLs.add(Wego_URL);
 	}
