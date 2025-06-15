@@ -66,12 +66,7 @@ public class TC_003_IncreaseBy50 {
 
 	boolean isAirline = false;
 
-	String[] alphaRoutes = {"ADD-KWI", "AMM-KWI", "AMM-RUH", "ATZ-KWI", "BAH-KWI", "BEY-KWI", "CAI-KWI", "DOH-KWI", "DXB-KWI", "HBE-KWI", "HMB-KWI", "IST-KWI",
-	                         "KWI-ADD", "KWI-AMM", "KWI-ATZ", "KWI-AUH", "KWI-BAH", "KWI-BEY", "KWI-BKK", "KWI-CAI", "KWI-CAN", "KWI-CDG", "KWI-CMB", "KWI-CMN",
-	                         "KWI-DOH", "KWI-DXB", "KWI-EAM", "KWI-HBE", "KWI-HMB", "KWI-IST", "KWI-JED", "KWI-JFK", "KWI-KTM", "KWI-LHR", "KWI-LXR", "KWI-MCT",
-	                         "KWI-MED", "KWI-MNL", "KWI-MXP", "KWI-RUH", "KWI-SAW", "KWI-SHJ", "KWI-SPX", "KWI-TBS", "MCT-KWI", "RUH-KWI", "SAW-KWI", "SHJ-KWI"};
-
-	String SystemName = "F3 - SA WEGO Scrapper - System Alpha";
+	String[] alphaRoutes = {"ADD-KWI", "AMM-KWI", "AMM-RUH", "ATZ-KWI", "BAH-KWI", "BEY-KWI", "CAI-KWI", "DOH-KWI", "DXB-KWI", "HBE-KWI", "HMB-KWI", "IST-KWI"};
 
 	int flightRunCount = 0;
 	String Wego_URL;
@@ -145,8 +140,8 @@ public class TC_003_IncreaseBy50 {
             int totalSize = responseList.size();
             System.out.println("totalSize : " + totalSize);
 
-            for (int i = 0; i < responseList.size(); i++) {
-            //for (int i = responseList.size() - 1; i >= 0; i--) {
+            //for (int i = 0; i < responseList.size(); i++) {
+            for (int i = responseList.size() - 1; i >= 0; i--) {
                 try {
                     JSONObject details = (JSONObject) responseList.get(i);
                     
@@ -216,7 +211,7 @@ public class TC_003_IncreaseBy50 {
 		
 	    //Wego_URL = "https://"+websiteName+"/en/flights/searches/"+source+"-"+destination+"-"+ date+"/economy/1a:0c:0i?sort=price&order=asc&airlines=F3%2CXY";
 
-	    Wego_URL = "https://"+websiteName+"/en/flights/searches/"+source+"-"+destination+"-"+ date+"/economy/1a:0c:0i?sort=score&order=asc&payment_methods=97%2C191%2C189&airlines=J9%2CKU%2CSV%2CGF%2CRJ%2CEK%2CQR%2CTK%2CVF%2CWY%2CME%2CFZ%2CUL%2CEY%2CPC%2CET%2CG9%2CSM";
+	    Wego_URL = "https://"+websiteName+"/en/flights/searches/"+source+"-"+destination+"-"+ date+"/economy/1a:0c:0i?sort=score&order=asc&payment_methods=97%2C191%2C189&utm_source=chatgpt.com";
 
 	    // Check if the URL has been visited before
 	    if (visitedURLs.contains(Wego_URL)) {
@@ -233,61 +228,73 @@ public class TC_003_IncreaseBy50 {
 	    } catch (InterruptedException e) {
 	    }
 	    resultsForWego();
-	    //Next_Dates();
+	    Next_Dates();
 	    // Add the current URL to the set of visited URLs
 	    visitedURLs.add(Wego_URL);
 	}
 	
 	public void resultsForWego() throws InterruptedException {
-        int maxRetries = 2;
-        boolean isPageLoaded = false; 
+	    int maxRetries = 2;
+	    boolean isPageLoaded = false;
+	    boolean isNewSRP = false;
 
-        for (int retryCount = 1; retryCount <= maxRetries; retryCount++) {
-            try {
-            	
-                WebDriverWait wait = new WebDriverWait(driver, 5); // 10 seconds timeout
-                WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h3[contains(text(),'Stops')]")));
-                System.out.println("Wego SRP Page Displayed");
-				try {
-					WebElement checkbox = driver.findElement(By.xpath("//div[contains(@class, 'HjHhQ5P5R0Q0aCiTlV7G') and contains(@class, 'Ia5JDEF_0rL4Gh4_fLO7')]"));
-					checkbox.click();
-					String originalWindow = driver.getWindowHandle();
+	    for (int retryCount = 1; retryCount <= maxRetries; retryCount++) {
+	        try {
+	            WebDriverWait wait = new WebDriverWait(driver, 5);
+	            wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h3[contains(text(),'Stops')]")));
+	            System.out.println("Wego SRP Page Displayed");
+	            
+	            // Attempt to close any unexpected new tab
+	            try {
+	                WebElement checkbox = driver.findElement(By.xpath("//div[contains(@class, 'HjHhQ5P5R0Q0aCiTlV7G') and contains(@class, 'Ia5JDEF_0rL4Gh4_fLO7')]"));
+	                checkbox.click();
+	                String originalWindow = driver.getWindowHandle();
 
-					Set<String> oldWindows = driver.getWindowHandles();
-					Set<String> newWindows = driver.getWindowHandles();
+	                Set<String> oldWindows = driver.getWindowHandles();
+	                Set<String> newWindows = driver.getWindowHandles();
 
-					for (String windowHandle : newWindows) {
-						if (!oldWindows.contains(windowHandle)) {
-							driver.switchTo().window(windowHandle);
-							System.out.println("Closing unexpected new tab: " + driver.getTitle());
-							driver.close(); // Close the new tab
+	                for (String windowHandle : newWindows) {
+	                    if (!oldWindows.contains(windowHandle)) {
+	                        driver.switchTo().window(windowHandle);
+	                        System.out.println("Closing unexpected new tab: " + driver.getTitle());
+	                        driver.close();
+	                        driver.switchTo().window(originalWindow);
+	                        break;
+	                    }
+	                }
+	            } catch (Exception e) {}
 
-							// Switch back to the original tab
-							driver.switchTo().window(originalWindow);
-							break;
-						}
-					}
+	            results(false); // old SRP
+	            isPageLoaded = true;
+	            break;
+	        } catch (Exception e) {
+	            try {
+	                WebDriverWait wait = new WebDriverWait(driver, 5);
+	                WebElement filters = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[contains(text(),'All Filters')]")));
+	                System.out.println("Wego NEW SRP Page Displayed");
+	                filters.click();
+	                Thread.sleep(2000);
+	                isNewSRP = true;
 
-				} catch (Exception e) {
+	                results(true); // new SRP
+	                isPageLoaded = true;
+	                break;
+	            } catch (Exception e1) {
+	                System.out.println("Wego SRP Page not Displayed - Retry #" + retryCount);
+	                teardown();
+	                setUp();
+	                driver.get(Wego_URL);
+	                Thread.sleep(5000);
+	            }
+	        }
+	    }
 
-				}
-                results(); // Assuming you have a method named results()
-                isPageLoaded = true;
-                break; // Exit the loop if the element is displayed
-            } catch (Exception e) {
-                System.out.println("Wego SRP Page not Displayed - Retry #" + retryCount);
-                driver.get(Wego_URL);
-                Thread.sleep(5000);
-            }
-        }
-
-        if (!isPageLoaded) {
-            System.out.println("Wego SRP Page could not be loaded after " + maxRetries + " retries");
-        }
-    }
+	    if (!isPageLoaded) {
+	        System.out.println("Wego SRP Page could not be loaded after " + maxRetries + " retries");
+	    }
+	}
 	
-	
-	public void results() throws InterruptedException {
+	public void results(boolean isNewSRP) throws InterruptedException {
 
 		try {
 			WebElement DirectFlights = driver.findElement(By.xpath("//*/text()[normalize-space(.)='Direct']/parent::*"));
@@ -309,25 +316,29 @@ public class TC_003_IncreaseBy50 {
 		if ("0".equals(NumberResults)) {
 			System.out.println("No Flights Available");
 		} else {
-            Thread.sleep(1000);
+            Thread.sleep(4000);
 			List<WebElement> getCount = driver.findElements(By.cssSelector("div[data-pw='flightSearchResults_tripCard']"));
 			//System.out.println("GetCount of Results:" + getCount.size());
 			int count = 0;
 			System.out.println("--------------------------------------------------------------------------------------------------------------------------------");
-			 String searchText = "websites";
-			 for (WebElement flightDetails : getCount) {
-		            // Get the text content of the flight details element
-				    String detailsText = flightDetails.getText().replaceAll("[\r\n]+", " ").replace(",", "").replace("SAR", "").replace("Per person", "").replace("Refundable ", "").split("View Deals")[0].trim();
-		            // Check if the text contains the specified search text
-		            if (detailsText.contains(searchText)) {
-		                // If it contains the text, print the flight details
+			 String searchText = "websites";		 
+		        for (WebElement flightDetails : getCount) {
+		            String detailsText = flightDetails.getText().replaceAll("[\r\n]+", " ").replace(",", "").replace("SAR", "").replace("Per person", "").replace("Refundable ", "").split("View Deals")[0].trim();
+		            if (isNewSRP || detailsText.contains(searchText)) {
 		            	System.out.println(detailsText);
 		                count++;
 		            }
-			 }
-			 System.out.println("Total Flights: " + count);
+		        }
 
-			if (!getCount.isEmpty()) {
+		        System.out.println("Total Flights: " + count);
+		        
+		        if (getCount.isEmpty()) {
+		            System.out.println("No Flights Available for this search");
+		            resultsForWego();
+		            return;
+		        }
+
+			  if (!getCount.isEmpty()) {
 
 				WebElement From = driver.findElement(By.cssSelector("div[data-pw='leg_departureAirportCode']"));
 				String FromCity = From.getText();
@@ -341,9 +352,9 @@ public class TC_003_IncreaseBy50 {
 				int count1 = 0;
 				for (WebElement viewDeal : elements) {
 					 String detailsText = viewDeal.getText().replaceAll("[\r\n]+", " ").replace(",", "").replace("SAR", "").replace("Per person", "").replace("Refundable ", "").split("View Deals")[0].trim();
-					 if (detailsText.contains(searchText)) {
-					 viewDeal.click();
-					 count1++;
+					 if (isNewSRP || detailsText.contains(searchText)) {
+			                viewDeal.click();
+			                count1++;
 				
 					try {
 						
@@ -486,7 +497,7 @@ public class TC_003_IncreaseBy50 {
 							        //topProviders.add(new ProviderPrice("danattravels.com", 0, "", 0));
 							    }
 
-							     // Step 5: Sort topProviders again to finalize correct price + DOM order
+							    // Step 5: Sort topProviders again to finalize correct price + DOM order
 							    //topProviders.sort(Comparator.comparingInt((ProviderPrice p) -> p.price).thenComparingInt(p -> p.originalIndex));
 
 							    // Step 5: Assign unique positions
@@ -563,7 +574,6 @@ public class TC_003_IncreaseBy50 {
 		}
 	
 	}
-
 
 	
 	@AfterMethod
