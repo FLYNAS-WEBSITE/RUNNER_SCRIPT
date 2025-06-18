@@ -2,7 +2,6 @@ name: Test1
 
 on:
   schedule:
-    - cron: '*/10 0-23 * * *'
     - cron: '*/20 0-23 * * *'
     - cron: '*/35 0-23 * * *'
 
