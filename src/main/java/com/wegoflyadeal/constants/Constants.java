@@ -14,7 +14,7 @@ public class Constants {
 	public static String Domain="SA";
 	
         // Multi routes 
-	public static final String Get_API_Path   = "https://midoffice.danattravels.com/be/api/v1/scrapping/fetch?client=wego&dys=10&skipdys=0";
+	public static final String Get_API_Path   = "https://midoffice.danattravels.com/be/api/v1/scrapping/fetch?client=wego&dys=10&skipdys=1";
 	public static final String Get_API_Path1  = "https://46exaa3f8g.execute-api.us-west-2.amazonaws.com/Prod/v1/rehlat/FetchScrRoutes?domain="+Domain+"&client=WEGO&days=1&isAirline=true&isFinal=false";
 	public static final String Get_API_Path2  = "https://46exaa3f8g.execute-api.us-west-2.amazonaws.com/Prod/v1/rehlat/FetchScrRoutes?domain="+Domain+"&client=WEGO&days=2&isAirline=true&isFinal=false";
 	public static final String Get_API_Path3  = "https://46exaa3f8g.execute-api.us-west-2.amazonaws.com/Prod/v1/rehlat/FetchScrRoutes?domain="+Domain+"&client=WEGO&days=3&isAirline=true&isFinal=false";
