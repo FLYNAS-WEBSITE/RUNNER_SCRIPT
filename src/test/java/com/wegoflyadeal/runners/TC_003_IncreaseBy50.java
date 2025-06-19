@@ -10,9 +10,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -75,6 +77,76 @@ public class TC_003_IncreaseBy50 {
 
 	public Set<String> completedFlightNumbers = new HashSet<>();
 
+	public static final Map<String, String> routeAirlinesMap = new HashMap<>();
+	static {
+		routeAirlinesMap.put("KWI-BAH", "J9,KU,GF");
+		routeAirlinesMap.put("BAH-KWI", "GF");
+
+		routeAirlinesMap.put("KWI-AMM", "J9,KU,RJ");
+		routeAirlinesMap.put("AMM-KWI", "J9,RJ");
+		routeAirlinesMap.put("AMM-RUH", "RJ");
+
+		routeAirlinesMap.put("KWI-DXB", "J9,KU,EK,FZ");
+		routeAirlinesMap.put("DXB-KWI", "EK,FZ");
+
+		routeAirlinesMap.put("KWI-DOH", "KU,QR");
+		routeAirlinesMap.put("DOH-KWI", "QR");
+
+		routeAirlinesMap.put("KWI-IST", "KU,TK");
+		routeAirlinesMap.put("IST-KWI", "TK");
+
+		routeAirlinesMap.put("KWI-SAW", "VF,PC");
+		routeAirlinesMap.put("SAW-KWI", "VF,PC");
+
+		routeAirlinesMap.put("KWI-MCT", "WY");
+		routeAirlinesMap.put("MCT-KWI", "WY");
+
+		routeAirlinesMap.put("KWI-BEY", "J9,KU,ME");
+		routeAirlinesMap.put("BEY-KWI", "ME");
+
+		routeAirlinesMap.put("KWI-CMB", "J9,UL");
+		routeAirlinesMap.put("KWI-AUH", "EY");
+		routeAirlinesMap.put("KWI-ADD", "ET");
+		routeAirlinesMap.put("ADD-KWI", "ET");
+
+		routeAirlinesMap.put("KWI-SHJ", "G9");
+		routeAirlinesMap.put("SHJ-KWI", "G9");
+
+		routeAirlinesMap.put("KWI-CAI", "SM");
+		routeAirlinesMap.put("CAI-KWI", "SV,SM");
+
+		routeAirlinesMap.put("KWI-HMB", "J9,SM");
+		routeAirlinesMap.put("KWI-ATZ", "SM");
+		routeAirlinesMap.put("KWI-HBE", "J9,SM");
+
+		routeAirlinesMap.put("HMB-KWI", "SM");
+		routeAirlinesMap.put("ATZ-KWI", "SM");
+		routeAirlinesMap.put("HBE-KWI", "J9,SM");
+
+		routeAirlinesMap.put("KWI-LXR", "J9");
+		routeAirlinesMap.put("KWI-SPX", "J9");
+
+		routeAirlinesMap.put("KWI-KTM", "J9,KU");
+		routeAirlinesMap.put("KWI-JED", "J9,KU,SV");
+		routeAirlinesMap.put("KWI-MED", "J9,KU,SV");
+
+		routeAirlinesMap.put("KWI-TBS", "J9");
+		routeAirlinesMap.put("KWI-LHR", "KU");
+		routeAirlinesMap.put("KWI-CAN", "KU");
+		routeAirlinesMap.put("KWI-BKK", "KU");
+		routeAirlinesMap.put("KWI-CDG", "KU");
+		routeAirlinesMap.put("KWI-CMN", "KU");
+
+		routeAirlinesMap.put("KWI-RUH", "KU,SV");
+		routeAirlinesMap.put("KWI-MNL", "KU");
+		routeAirlinesMap.put("KWI-JFK", "KU");
+		routeAirlinesMap.put("KWI-MXP", "KU");
+
+		routeAirlinesMap.put("RUH-KWI", "SV");
+		routeAirlinesMap.put("KWI-EAM", "SV");
+	}
+
+	
 	@AfterTest
 	public void quitTheSession() {
 		if (driver != null) {
@@ -211,8 +283,12 @@ public class TC_003_IncreaseBy50 {
 		
 	    //Wego_URL = "https://"+websiteName+"/en/flights/searches/"+source+"-"+destination+"-"+ date+"/economy/1a:0c:0i?sort=price&order=asc&airlines=F3%2CXY";
 
-	    Wego_URL = "https://"+websiteName+"/en/flights/searches/"+source+"-"+destination+"-"+ date+"/economy/1a:0c:0i?sort=score&order=asc&payment_methods=97%2C191%2C189&airlines=J9%2CKU%2CSV%2CGF%2CRJ%2CEK%2CQR%2CTK%2CVF%2CWY%2CME%2CFZ%2CUL%2CEY%2CPC%2CET%2CG9%2CSM";
+	    //Wego_URL = "https://"+websiteName+"/en/flights/searches/"+source+"-"+destination+"-"+ date+"/economy/1a:0c:0i?sort=score&order=asc&payment_methods=97%2C191%2C189&airlines=J9%2CKU%2CSV%2CGF%2CRJ%2CEK%2CQR%2CTK%2CVF%2CWY%2CME%2CFZ%2CUL%2CEY%2CPC%2CET%2CG9%2CSM";
+		String routeKey = source + "-" + destination;
+		String airlineParam = routeAirlinesMap.getOrDefault(routeKey, "J9,KU,SV,GF,RJ,EK,QR,TK,VF,WY,ME,FZ,UL,EY,PC,ET,G9,SM"); // fallback to all
 
+		Wego_URL = "https://" + websiteName + "/en/flights/searches/" + source + "-" + destination + "-" + date +"/economy/1a:0c:0i?sort=score&order=asc&payment_methods=97%2C191%2C189" + "&airlines=" + airlineParam.replaceAll(",", "%2C");
+		
 	    // Check if the URL has been visited before
 	    if (visitedURLs.contains(Wego_URL)) {
 	        System.out.println("Duplicate URL detected - Skipping search");
